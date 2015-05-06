@@ -2,6 +2,10 @@
    Decode 2048
    ========================================================================== */
 
+html {
+    font-family: 'Open Sans', 'Helvetica', 'Arial', sans-serif;
+}
+
 /* Layout
    ========================================================================== */
 
@@ -74,6 +78,7 @@
 
     vertical-align: middle;
     font-size: 2em;
+    font-weight: lighter;
     color: #fff;
 
     transition-property: top, left, transform;
@@ -113,6 +118,7 @@
     margin-top: -0.5em;
 
     height: 1em;
+    line-height: 1em;
 
     text-align: center;
 }
