@@ -6,47 +6,47 @@
    ========================================================================== */
 
 .game-container {
-  position: relative;
-  margin: 50px auto;
+    position: relative;
+    margin: 50px auto;
 
-  width: 600px;
-  height: 600px;
+    width: 600px;
+    height: 600px;
 
-  background-color: #e3c386;
+    background-color: #e3c386;
 }
 
 /* Grid
    ========================================================================== */
 
 .grid-container {
-  width: 100%;
-  height: 100%;
-  padding: 10px;
-  box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    box-sizing: border-box;
 }
 
 .grid-row {
-  width: 100%;
-  height: 25%;
+    width: 100%;
+    height: 25%;
 }
 
 .grid-element {
-  float: left;
+    float: left;
 
-  width: 25%;
-  height: 100%;
-  padding: 10px;
-  box-sizing: border-box;
+    width: 25%;
+    height: 100%;
+    padding: 10px;
+    box-sizing: border-box;
 }
 
 .grid-element:before {
-  content: ' ';
-  display: block;
+    content: ' ';
+    display: block;
 
-  width: 100%;
-  height: 100%;
+    width: 100%;
+    height: 100%;
 
-  background-color: #fadca2;
+    background-color: #fadca2;
 }
 
 
@@ -54,52 +54,54 @@
    ========================================================================== */
 
 .tile-container {
-  position: absolute;
-  left: 10px;
-  top: 10px;
-  right: 10px;
-  bottom: 10px;
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    right: 10px;
+    bottom: 10px;
 }
 
 .tile {
-  position: absolute;
-  display: table-cell;
-  z-index: 1;
+    position: absolute;
+    display: table-cell;
+    z-index: 1;
 
-  width: 25%;
-  height: 25%;
-  padding: 10px;
-  box-sizing: border-box;
+    width: 25%;
+    height: 25%;
+    padding: 10px;
+    box-sizing: border-box;
 
-  vertical-align: middle;
-  font-size: 2em;
+    vertical-align: middle;
+    font-size: 2em;
+
+
 }
 
 .tile:before {
-  content: ' ';
-  display: block;
-  z-index: -1;
+    content: ' ';
+    display: block;
+    z-index: -1;
 
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  right: 10px;
-  bottom: 10px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
 
-  background-color: #fff;
+    background-color: #fff;
 }
 
 .tile-text {
-  position: absolute;
-  display: block;
-  top: 50%;
-  left: 10px;
-  right: 10px;
-  margin-top: -0.5em;
+    position: absolute;
+    display: block;
+    top: 50%;
+    left: 10px;
+    right: 10px;
+    margin-top: -0.5em;
 
-  height: 1em;
+    height: 1em;
 
-  text-align: center;
+    text-align: center;
 }
 
 .pos-0-0 { left:  0%; top:  0%; }
