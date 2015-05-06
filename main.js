@@ -88,6 +88,8 @@ function combineTile(row, col, intoRow, intoCol) {
     newTile.value += oldTile.value;
     newTile.hasMerged = true;
     oldTile.dead = true;
+    oldTile.row = intoRow;
+    oldTile.col = intoCol;
 
     removeTile(row, col);
 }
@@ -125,7 +127,10 @@ function renderGame() {
         }
 
         tile.text.innerHTML = tile.value;
-        tile.element.className = 'tile pos-' + tile.row + '-' + tile.col;
+        tile.element.className = 'tile pos-' + tile.row + '-' + tile.col + ' tile-' + tile.value;
+        if (tile.dead) {
+            tile.element.className += ' dead';
+        }
 
         tile.hasMerged = false;
     }
@@ -133,11 +138,19 @@ function renderGame() {
     for (var i = 0; i < remove.length; i += 1) {
         var tile = remove[i];
 
-        if (tile.element) {
-            tileContainer.removeChild(tile.element);
-        }
+
         tileList.splice(tileList.indexOf(tile), 1);
     }
+
+    setTimeout(function() {
+        for (var i = 0; i < remove.length; i += 1) {
+        var tile = remove[i];
+
+            if (tile.element) {
+                tileContainer.removeChild(tile.element);
+            }
+        }
+    }, 200);
 }
 
 /**

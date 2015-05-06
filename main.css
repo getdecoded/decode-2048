@@ -55,6 +55,7 @@
 
 .tile-container {
     position: absolute;
+    z-index: 2;
     left: 10px;
     top: 10px;
     right: 10px;
@@ -73,8 +74,18 @@
 
     vertical-align: middle;
     font-size: 2em;
+    color: #fff;
 
+    transition-property: top, left, transform;
+    transition-duration: 0.1s;
 
+    animation: grow 0.2s;
+    -webkit-animation: grow 0.2s;
+}
+
+.tile.dead {
+    z-index: -1;
+    transform: scale(0.5);
 }
 
 .tile:before {
@@ -88,7 +99,9 @@
     right: 10px;
     bottom: 10px;
 
-    background-color: #fff;
+    background-color: #b22ba2;
+
+    transition: background-color 0.2s;
 }
 
 .tile-text {
@@ -103,6 +116,20 @@
 
     text-align: center;
 }
+
+.tile-2:before { background-color: #261f1f }
+.tile-4:before { background-color: #4d3c3c }
+.tile-8:before { background-color: #643232 }
+.tile-16:before { background-color: #903535 }
+.tile-32:before { background-color: #b26f2b }
+.tile-64:before { background-color: #a2b22b }
+.tile-128:before { background-color: #55b22b }
+.tile-256:before { background-color: #2bb274 }
+.tile-512:before { background-color: #2badb2 }
+.tile-1024:before { background-color: #2b64b2 }
+.tile-2048:before { background-color: #352bb2 } /* yay */
+.tile-4096:before { background-color: #7e2bb2 }
+.tile-8192:before { background-color: #b22ba2 }
 
 .pos-0-0 { left:  0%; top:  0%; }
 .pos-0-1 { left: 25%; top:  0%; }
@@ -123,3 +150,16 @@
 .pos-3-1 { left: 25%; top: 75%; }
 .pos-3-2 { left: 50%; top: 75%; }
 .pos-3-3 { left: 75%; top: 75%; }
+
+/* Animations
+   ========================================================================== */
+
+@keyframes grow {
+    from { transform: scale(0); }
+    to { transform: scale(1); }
+}
+
+@-webkit-keyframes grow {
+    from { transform: scale(0); }
+    to { transform: scale(1); }
+}
