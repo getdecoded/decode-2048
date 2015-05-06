@@ -2,13 +2,24 @@ var tiles = [];
 var tileList = [];
 var gridSize = 4;
 var tileContainer = document.getElementById('tile-container');
+var scoreContainer = document.getElementById('score-counter');
+var score = 0;
 
 /**
- * Sets up the game by creating arrays and adding first tiles
+ * Sets up the game for the frist time
  */
 function setupGame() {
+    document.addEventListener('keydown', handleKey);
+    startGame();
+}
+
+/**
+ * Starts game by creating arrays and adding first tiles
+ */
+function startGame() {
     tiles = [];
     tileList = [];
+    score = 0;
 
     for (var row = 0; row < gridSize; row += 1) {
         tiles.push([]);
@@ -92,6 +103,8 @@ function combineTile(row, col, intoRow, intoCol) {
     oldTile.row = intoRow;
     oldTile.col = intoCol;
 
+    score += newTile.value;
+
     removeTile(row, col);
 }
 
@@ -135,6 +148,8 @@ function renderGame() {
 
         tile.hasMerged = false;
     }
+
+    scoreContainer.innerHTML = score;
 
     for (var i = 0; i < remove.length; i += 1) {
         var tile = remove[i];
@@ -290,9 +305,8 @@ function lose() {
         }
     }
 
-    setupGame();
+    startGame();
 }
 
 // Run the game
-document.addEventListener('keydown', handleKey);
 setupGame();
