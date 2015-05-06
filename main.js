@@ -27,7 +27,11 @@ function setupGame() {
  * Determine if a tile is occupied
  */
 function tileActive(row, col) {
-    return !!tiles[row][col];
+    try {
+        return !!tiles[row][col];
+    } catch (e) {
+        throw new Error('Could not find tile at ' + row + ', ' + col);
+    }
 }
 
 /**
@@ -35,7 +39,7 @@ function tileActive(row, col) {
  */
 function addTile(row, col, value) {
     if (!value) {
-        value = Math.random() < 0.25 ? 2 : 4;
+        value = Math.random() < 0.25 ? 4 : 2;
     }
 
     var tile = {
@@ -75,26 +79,65 @@ function moveTile(row, col, newRow, newCol) {
 }
 
 /**
+ * Combine two tiles into one
+ */
+function combineTile(row, col, intoRow, intoCol) {
+    var oldTile = tiles[row][col];
+    var newTile = tiles[intoRow][intoCol];
+
+    newTile.value += oldTile.value;
+    newTile.hasMerged = true;
+    oldTile.dead = true;
+
+    removeTile(row, col);
+}
+
+/**
+ * Remove a tile from the board
+ */
+function removeTile(row, col) {
+    var tile = tiles[row][col];
+
+    tile.dead = true;
+    tiles[row][col] = null;
+}
+
+/**
  * Renders the game!
  */
 function renderGame() {
+    var remove = [];
     for (var i = 0; i < tileList.length; i += 1) {
         var tile = tileList[i];
+        if (tile.dead) {
+            remove.push(tile);
+        }
+
 
         if (!tile.element) {
             tile.element = document.createElement('div');
 
             tile.text = document.createElement('span');
             tile.text.className = 'tile-text';
-            tile.text.innerHTML = tile.value;
             tile.element.appendChild(tile.text);
 
             tileContainer.appendChild(tile.element);
         }
 
+        tile.text.innerHTML = tile.value;
         tile.element.className = 'tile pos-' + tile.row + '-' + tile.col;
+
+        tile.hasMerged = false;
     }
 
+    for (var i = 0; i < remove.length; i += 1) {
+        var tile = remove[i];
+
+        if (tile.element) {
+            tileContainer.removeChild(tile.element);
+        }
+        tileList.splice(tileList.indexOf(tile), 1);
+    }
 }
 
 /**
@@ -105,6 +148,7 @@ function renderGame() {
  */
 function push(axis, dir) {
     var start = 0;
+    var moved = false;
     if (dir === 1) {
         start = gridSize - 1;
     }
@@ -113,31 +157,59 @@ function push(axis, dir) {
         for (var col = start; (col >= 0) && (col < gridSize); col -= dir) {
 
             if (tileActive(row, col)) {
-                console.log('MOVING TILE: ', row, col);
+                var currentTile = tiles[row][col];
                 var newTile;
+                var startTile;
+                var merged = false;
+
                 if (axis === 'col') {
                     newTile = row;
                 } else {
                     newTile = col;
                 }
+
+                startTile = newTile;
+
                 for (var test = newTile + dir; (test >= 0) && (test < gridSize); test += dir) {
-                    console.log(axis, test);
                     if (((axis === 'col') && (tileActive(test, col))) || ((axis === 'row') && (tileActive(row, test)))) {
-                        // Collision, check to merge!
+                        var checkTile;
+                        if (axis === 'col') {
+                            checkTile = tiles[test][col];
+                        } else {
+                            checkTile = tiles[row][test];
+                        }
+
+                        console.log(checkTile.value, currentTile.value);
+
+                        if ((checkTile.value === currentTile.value) && (!checkTile.hasMerged)) {
+                            merged = true;
+                            combineTile(row, col, checkTile.row, checkTile.col);
+                        }
+
                         break;
                     } else {
                         newTile = test;
                     }
                 }
 
-                if (axis === 'col') {
-                    moveTile(row, col, newTile, col);
+                if (!merged) {
+                    if (axis === 'col') {
+                        moveTile(row, col, newTile, col);
+                    } else {
+                        moveTile(row, col, row, newTile);
+                    }
+
+                    if (startTile !== newTile) {
+                        moved = true;
+                    }
                 } else {
-                    moveTile(row, col, row, newTile);
+                    moved = true;
                 }
             }
         }
     }
+
+    return moved;
 }
 
 /**
@@ -159,30 +231,41 @@ function canMove() {
  * Handle the keypresses
  */
 function handleKey(event) {
+    var moved = false;
     switch (event.keyCode) {
         case 37: // Left
-            push('row', -1);
+            moved = push('row', -1);
             break;
         case 38: // Up
-            push('col', -1);
+            moved = push('col', -1);
             break;
         case 39: // Right
-            push('row', 1);
+            moved = push('row', 1);
             break;
         case 40: // Down
-            push('col', 1);
+            moved = push('col', 1);
             break;
     }
 
-    addTileRandom();
+    if (moved) {
+        addTileRandom();
 
-    if (canMove()) {
-        renderGame();
-    } else {
-        document.write('Lose');
+        if (canMove()) {
+            renderGame();
+        } else {
+            document.write('Lose');
+        }
     }
 
-    event.preventDefault();
+
+    switch (event.keyCode) {
+        case 37: // Left
+        case 38: // Up
+        case 39: // Right
+        case 40: // Down
+            event.preventDefault();
+            break;
+    }
 }
 
 // Run the game
