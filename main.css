@@ -46,6 +46,8 @@ body:before {
     width: 100%;
 
     background-color: #919191;
+
+    border-radius: 10px;
 }
 
 .game-container:before {
@@ -64,6 +66,7 @@ body:before {
     top: 0;
     right: 0;
     bottom: 0;
+
     padding: 10px;
     box-sizing: border-box;
 }
@@ -90,6 +93,8 @@ body:before {
     height: 100%;
 
     background-color: #6f6f6f;
+
+    border-radius: 10px;
 }
 
 
@@ -144,6 +149,8 @@ body:before {
     bottom: 10px;
 
     background-color: #b22ba2;
+
+    border-radius: 10px;
 
     transition: background-color 0.2s;
 }
