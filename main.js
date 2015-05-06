@@ -123,8 +123,11 @@ function removeTile(row, col) {
  */
 function renderGame() {
     var remove = [];
-    for (var i = 0; i < tileList.length; i += 1) {
-        var tile = tileList[i];
+    var tile;
+    var i;
+
+    for (i = 0; i < tileList.length; i += 1) {
+        tile = tileList[i];
         if (tile.dead) {
             remove.push(tile);
         }
@@ -151,8 +154,8 @@ function renderGame() {
 
     scoreContainer.innerHTML = score;
 
-    for (var i = 0; i < remove.length; i += 1) {
-        var tile = remove[i];
+    for (i = 0; i < remove.length; i += 1) {
+        tile = remove[i];
 
 
         tileList.splice(tileList.indexOf(tile), 1);
