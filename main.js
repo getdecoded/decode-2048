@@ -7,6 +7,9 @@ var tileContainer = document.getElementById('tile-container');
  * Sets up the game by creating arrays and adding first tiles
  */
 function setupGame() {
+    tiles = [];
+    tileList = [];
+
     for (var row = 0; row < gridSize; row += 1) {
         tiles.push([]);
 
@@ -17,8 +20,6 @@ function setupGame() {
 
     addTileRandom();
     addTileRandom();
-    console.log('??');
-    document.addEventListener('keydown', handleKey);
 
     renderGame();
 }
@@ -245,6 +246,16 @@ function canMove() {
  */
 function handleKey(event) {
     var moved = false;
+
+    switch (event.keyCode) {
+        case 37: // Left
+        case 38: // Up
+        case 39: // Right
+        case 40: // Down
+            event.preventDefault();
+            break;
+    }
+
     switch (event.keyCode) {
         case 37: // Left
             moved = push('row', -1);
@@ -262,24 +273,26 @@ function handleKey(event) {
 
     if (moved) {
         addTileRandom();
-
-        if (canMove()) {
-            renderGame();
-        } else {
-            document.write('Lose');
+        renderGame();
+        if (!canMove()) {
+            lose();
         }
-    }
-
-
-    switch (event.keyCode) {
-        case 37: // Left
-        case 38: // Up
-        case 39: // Right
-        case 40: // Down
-            event.preventDefault();
-            break;
     }
 }
 
+/**
+ * Handle losing
+ */
+function lose() {
+    for (var i = 0; i < tileList.length; i += 1) {
+        if (tileList[i].element) {
+            tileContainer.removeChild(tileList[i].element);
+        }
+    }
+
+    setupGame();
+}
+
 // Run the game
+document.addEventListener('keydown', handleKey);
 setupGame();
