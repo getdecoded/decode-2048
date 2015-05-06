@@ -6,7 +6,7 @@ var scoreContainer = document.getElementById('score-counter');
 var score = 0;
 
 /**
- * Sets up the game for the frist time
+ * Sets up the game for the first time
  */
 function setupGame() {
     document.addEventListener('keydown', handleKey);
