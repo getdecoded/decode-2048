@@ -185,7 +185,6 @@ function push(axis, dir) {
         start = gridSize - 1;
     }
     for (var row = start; (row >= 0) && (row < gridSize); row -= dir) {
-        console.log(row);
         for (var col = start; (col >= 0) && (col < gridSize); col -= dir) {
 
             if (tileActive(row, col)) {
@@ -210,8 +209,6 @@ function push(axis, dir) {
                         } else {
                             checkTile = tiles[row][test];
                         }
-
-                        console.log(checkTile.value, currentTile.value);
 
                         if ((checkTile.value === currentTile.value) && (!checkTile.hasMerged)) {
                             merged = true;
