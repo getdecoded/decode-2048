@@ -1,0 +1,123 @@
+/* ==========================================================================
+   Decode 2048
+   ========================================================================== */
+
+/* Layout
+   ========================================================================== */
+
+.game-container {
+  position: relative;
+  margin: 50px auto;
+
+  width: 600px;
+  height: 600px;
+
+  background-color: #e3c386;
+}
+
+/* Grid
+   ========================================================================== */
+
+.grid-container {
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.grid-row {
+  width: 100%;
+  height: 25%;
+}
+
+.grid-element {
+  float: left;
+
+  width: 25%;
+  height: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.grid-element:before {
+  content: ' ';
+  display: block;
+
+  width: 100%;
+  height: 100%;
+
+  background-color: #fadca2;
+}
+
+
+/* Tiles
+   ========================================================================== */
+
+.tile-container {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  right: 10px;
+  bottom: 10px;
+}
+
+.tile {
+  position: absolute;
+  display: table-cell;
+  z-index: 1;
+
+  width: 25%;
+  height: 25%;
+  padding: 10px;
+  box-sizing: border-box;
+
+  vertical-align: middle;
+  font-size: 2em;
+}
+
+.tile:before {
+  content: ' ';
+  display: block;
+  z-index: -1;
+
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+
+  background-color: #fff;
+}
+
+.tile-text {
+  position: absolute;
+  display: block;
+  top: 50%;
+  left: 10px;
+  right: 10px;
+  margin-top: -0.5em;
+
+  height: 1em;
+
+  text-align: center;
+}
+
+.pos-0-0 { left:  0%; top:  0%; }
+.pos-0-1 { left: 25%; top:  0%; }
+.pos-0-2 { left: 50%; top:  0%; }
+.pos-0-3 { left: 75%; top:  0%; }
+
+.pos-1-0 { left:  0%; top: 25%; }
+.pos-1-1 { left: 25%; top: 25%; }
+.pos-1-2 { left: 50%; top: 25%; }
+.pos-1-3 { left: 75%; top: 25%; }
+
+.pos-2-0 { left:  0%; top: 50%; }
+.pos-2-1 { left: 25%; top: 50%; }
+.pos-2-2 { left: 50%; top: 50%; }
+.pos-2-3 { left: 75%; top: 50%; }
+
+.pos-3-0 { left:  0%; top: 75%; }
+.pos-3-1 { left: 25%; top: 75%; }
+.pos-3-2 { left: 50%; top: 75%; }
+.pos-3-3 { left: 75%; top: 75%; }
