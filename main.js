@@ -37,6 +37,10 @@ function startGame() {
 
 /**
  * Determine if a tile is occupied
+ *
+ * @param {Number} row
+ * @param {Number} col
+ * @returns {Boolean} If there is a tile at this location
  */
 function tileActive(row, col) {
     try {
@@ -48,6 +52,10 @@ function tileActive(row, col) {
 
 /**
  * Adds a new tile to the game
+ *
+ * @param {Number} row
+ * @param {Number} col
+ * @param {Number} [value] - The value to assign to the tile
  */
 function addTile(row, col, value) {
     if (!value) {
@@ -80,6 +88,11 @@ function addTileRandom() {
 
 /**
  * Move a tile somewhere
+ *
+ * @param {Number} row
+ * @param {Number} col
+ * @param {Number} newRow
+ * @param {Number} newCol
  */
 function moveTile(row, col, newRow, newCol) {
     var tile = tiles[row][col];
@@ -92,6 +105,11 @@ function moveTile(row, col, newRow, newCol) {
 
 /**
  * Combine two tiles into one
+ *
+ * @param {Number} row
+ * @param {Number} col
+ * @param {Number} intoRow
+ * @param {Number} intoCol
  */
 function combineTile(row, col, intoRow, intoCol) {
     var oldTile = tiles[row][col];
@@ -110,6 +128,9 @@ function combineTile(row, col, intoRow, intoCol) {
 
 /**
  * Remove a tile from the board
+ *
+ * @param {Number} row
+ * @param {Number} col
  */
 function removeTile(row, col) {
     var tile = tiles[row][col];
@@ -172,11 +193,13 @@ function renderGame() {
     }, 200);
 }
 
+
 /**
- * Move all of the tiles up (where possible)
+ * Move all of the tiles (where possible)
  *
  * @param (String) axis - Whether to go along 'col' or 'row'
  * @param (Number) dir - Whether to move up (-1) or down (1)
+ * @returns {Boolean} Whether anything moved or not
  */
 function push(axis, dir) {
     var start = 0;
@@ -258,6 +281,8 @@ function canMove() {
 
 /**
  * Handle the keypresses
+ *
+ * @param {Object} event
  */
 function handleKey(event) {
     var moved = false;
