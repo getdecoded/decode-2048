@@ -193,6 +193,68 @@ function renderGame() {
     }, 200);
 }
 
+/**
+ * Move a single tile if possible
+ *
+ * @param {Number} row
+ * @param {Number} col
+ * @param {String} axis - Whether to go along 'col' or 'row'
+ * @param {Number} dir - Whether to move up (-1) or down (1)
+ * @returns {Boolean} Whether the tile moved or not
+ */
+function push(row, col, axis, dir) {
+    var currentTile = tiles[row][col];
+    var newPos;
+    var startPos;
+    var merged = false;
+    var moved = false;
+
+    if (axis === 'col') {
+        newPos = row;
+    } else {
+        newPos = col;
+    }
+
+    startPos = newPos;
+
+    for (var test = newPos + dir; (test >= 0) && (test < gridSize); test += dir) {
+        if (((axis === 'col') && (tileActive(test, col))) ||
+            ((axis === 'row') && (tileActive(row, test)))) {
+            var checkTile;
+
+            if (axis === 'col') {
+                checkTile = tiles[test][col];
+            } else {
+                checkTile = tiles[row][test];
+            }
+
+            if ((checkTile.value === currentTile.value) && (!checkTile.hasMerged)) {
+                merged = true;
+                combineTile(row, col, checkTile.row, checkTile.col);
+            }
+
+            break;
+        } else {
+            newPos = test;
+        }
+    }
+
+    if (!merged) {
+        if (axis === 'col') {
+            moveTile(row, col, newPos, col);
+        } else {
+            moveTile(row, col, row, newPos);
+        }
+
+        if (startPos !== newPos) {
+            moved = true;
+        }
+    } else {
+        moved = true;
+    }
+
+    return moved;
+}
 
 /**
  * Move all of the tiles (where possible)
@@ -201,60 +263,18 @@ function renderGame() {
  * @param (Number) dir - Whether to move up (-1) or down (1)
  * @returns {Boolean} Whether anything moved or not
  */
-function push(axis, dir) {
+function pushAll(axis, dir) {
     var start = 0;
     var moved = false;
+
     if (dir === 1) {
         start = gridSize - 1;
     }
+
     for (var row = start; (row >= 0) && (row < gridSize); row -= dir) {
         for (var col = start; (col >= 0) && (col < gridSize); col -= dir) {
-
             if (tileActive(row, col)) {
-                var currentTile = tiles[row][col];
-                var newTile;
-                var startTile;
-                var merged = false;
-
-                if (axis === 'col') {
-                    newTile = row;
-                } else {
-                    newTile = col;
-                }
-
-                startTile = newTile;
-
-                for (var test = newTile + dir; (test >= 0) && (test < gridSize); test += dir) {
-                    if (((axis === 'col') && (tileActive(test, col))) || ((axis === 'row') && (tileActive(row, test)))) {
-                        var checkTile;
-                        if (axis === 'col') {
-                            checkTile = tiles[test][col];
-                        } else {
-                            checkTile = tiles[row][test];
-                        }
-
-                        if ((checkTile.value === currentTile.value) && (!checkTile.hasMerged)) {
-                            merged = true;
-                            combineTile(row, col, checkTile.row, checkTile.col);
-                        }
-
-                        break;
-                    } else {
-                        newTile = test;
-                    }
-                }
-
-                if (!merged) {
-                    if (axis === 'col') {
-                        moveTile(row, col, newTile, col);
-                    } else {
-                        moveTile(row, col, row, newTile);
-                    }
-
-                    if (startTile !== newTile) {
-                        moved = true;
-                    }
-                } else {
+                if (push(row, col, axis, dir)) {
                     moved = true;
                 }
             }
@@ -298,16 +318,16 @@ function handleKey(event) {
 
     switch (event.keyCode) {
         case 37: // Left
-            moved = push('row', -1);
+            moved = pushAll('row', -1);
             break;
         case 38: // Up
-            moved = push('col', -1);
+            moved = pushAll('col', -1);
             break;
         case 39: // Right
-            moved = push('row', 1);
+            moved = pushAll('row', 1);
             break;
         case 40: // Down
-            moved = push('col', 1);
+            moved = pushAll('col', 1);
             break;
     }
 
