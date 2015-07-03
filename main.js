@@ -242,11 +242,8 @@ function push(row, col, axis, dir) {
 
     moveTile(row, col, newPos.row, newPos.col);
 
-    if (startPos !== newPos) {
-        return true;
-    }
-
-    return false;
+    // Return whether the tile has moved or not
+    return (startPos !== newPos);
 }
 
 /**
