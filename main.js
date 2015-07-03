@@ -148,29 +148,13 @@ function renderGame() {
     var i;
 
     for (i = 0; i < tileList.length; i += 1) {
+        updateTile(i);
+
         tile = tileList[i];
+
         if (tile.dead) {
             remove.push(tile);
         }
-
-
-        if (!tile.element) {
-            tile.element = document.createElement('div');
-
-            tile.text = document.createElement('span');
-            tile.text.className = 'tile-text';
-            tile.element.appendChild(tile.text);
-
-            tileContainer.appendChild(tile.element);
-        }
-
-        tile.text.innerHTML = tile.value;
-        tile.element.className = 'tile pos-' + tile.row + '-' + tile.col + ' tile-' + tile.value;
-        if (tile.dead) {
-            tile.element.className += ' dead';
-        }
-
-        tile.hasMerged = false;
     }
 
     scoreContainer.innerHTML = score;
@@ -178,19 +162,45 @@ function renderGame() {
     for (i = 0; i < remove.length; i += 1) {
         tile = remove[i];
 
-
         tileList.splice(tileList.indexOf(tile), 1);
     }
 
     setTimeout(function() {
         for (var i = 0; i < remove.length; i += 1) {
-        var tile = remove[i];
+            var tile = remove[i];
 
             if (tile.element) {
                 tileContainer.removeChild(tile.element);
             }
         }
     }, 200);
+}
+
+/**
+ * Updates and renders a single tile
+ *
+ * @param {Number} index
+ */
+function updateTile(index) {
+    var tile = tileList[index];
+
+    if (!tile.element) {
+        tile.element = document.createElement('div');
+
+        tile.text = document.createElement('span');
+        tile.text.className = 'tile-text';
+        tile.element.appendChild(tile.text);
+
+        tileContainer.appendChild(tile.element);
+    }
+
+    tile.text.innerHTML = tile.value;
+    tile.element.className = 'tile pos-' + tile.row + '-' + tile.col + ' tile-' + tile.value;
+    tile.hasMerged = false;
+
+    if (tile.dead) {
+        tile.element.className += ' dead';
+    }
 }
 
 /**
