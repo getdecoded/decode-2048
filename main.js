@@ -203,57 +203,40 @@ function renderGame() {
  * @returns {Boolean} Whether the tile moved or not
  */
 function push(row, col, axis, dir) {
+    // If we're moving along a column, we're changing the row
+    // If we're moving across a row, we're changing the column
+    var throughAxis = axis === 'row' ? 'col' : 'row';
+    var newPos = { row: row, col: col };
+    var startPos = newPos[throughAxis];
     var currentTile = tiles[row][col];
-    var newPos;
-    var startPos;
-    var merged = false;
-    var moved = false;
 
-    if (axis === 'col') {
-        newPos = row;
-    } else {
-        newPos = col;
-    }
+    for (var testPos = startPos + dir; (testPos >= 0) && (testPos < gridSize); testPos += dir) {
+        newPos[throughAxis] = testPos;
 
-    startPos = newPos;
-
-    for (var test = newPos + dir; (test >= 0) && (test < gridSize); test += dir) {
-        if (((axis === 'col') && (tileActive(test, col))) ||
-            ((axis === 'row') && (tileActive(row, test)))) {
-            var checkTile;
-
-            if (axis === 'col') {
-                checkTile = tiles[test][col];
-            } else {
-                checkTile = tiles[row][test];
-            }
+        if (tileActive(newPos.row, newPos.col)) {
+            var checkTile = tiles[newPos.row][newPos.col];
 
             if ((checkTile.value === currentTile.value) && (!checkTile.hasMerged)) {
-                merged = true;
                 combineTile(row, col, checkTile.row, checkTile.col);
+
+                // End the function here
+                return true;
             }
 
+            // Backtrack to the previous tile
+            newPos[throughAxis] = testPos - dir;
+
             break;
-        } else {
-            newPos = test;
         }
     }
 
-    if (!merged) {
-        if (axis === 'col') {
-            moveTile(row, col, newPos, col);
-        } else {
-            moveTile(row, col, row, newPos);
-        }
+    moveTile(row, col, newPos.row, newPos.col);
 
-        if (startPos !== newPos) {
-            moved = true;
-        }
-    } else {
-        moved = true;
+    if (startPos !== newPos) {
+        return true;
     }
 
-    return moved;
+    return false;
 }
 
 /**
